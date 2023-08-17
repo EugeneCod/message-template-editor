@@ -1,8 +1,25 @@
 //colors
-// $black-bg: #1d1d1d;
-// $gray-bg: #454545;
-// $light-gray-bg: #b9b9b9;
-// $main-bg: #eeeeee;
+$main-bg: #01001b;
+$additional-bg: #1a1933;
+$main-font-color: #b5b5b5;
+$var-button-color: #1aff00;
+$gray-button-color: #2a2525;
+$conditional-color-if: #4848fd;
+$conditional-color-then: #c300ff;
+$conditional-color-else: #00e5ff;
+$control-button-background: #23a2e7;
+$control-button-background-hl: #da1919;
+
+//templates
+%tplButtonEffects{
+  transition: box-shadow .1s ease;
+  &:hover {
+    box-shadow: 0px 0px 3px 0px;
+  }
+  &:active {
+    box-shadow: 0px 0px 6px 0px;
+  }
+}
 // $popup-bg: #eeeeee;
 // $promo-line-bg: #fde801;
 // $input-line-bg: #82817c;

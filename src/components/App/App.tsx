@@ -1,8 +1,23 @@
-import React from 'react'
+import { FC, useState } from 'react'
 
-const App = () => {
+import styles from './App.module.scss'
+import { StartButton, Editor, PopupWithMessgePreview } from '../';
+
+
+const App: FC = () => {
+  const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(true)
+  
+  function closePopup() {
+    setPopupWithMessagePreviewIsOpen(false);
+    // setPopupWithMessagePreviewIsOpen(true);
+  }
+
   return (
-    <div>App</div>
+    <main className={styles.root}>
+      <StartButton/>
+      <Editor />
+      <PopupWithMessgePreview isOpen={popupWithMessagePreviewIsOpen} onClose={closePopup}/>
+    </main>
   )
 }
 

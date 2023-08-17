@@ -1,0 +1,22 @@
+.root {
+  width: 200px;
+  text-transform: uppercase;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #00ffd5;
+  opacity: 0.9;
+  transition: opacity .2s linear;
+  box-shadow: inset 0px 0px 20px 5px;
+  color: #000;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+  &:active {
+    opacity: .6;
+  }
+}
