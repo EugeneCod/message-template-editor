@@ -1,0 +1,16 @@
+@import '../../scss/variables.scss';
+
+.textArea {
+  background-color: $main-bg;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  color: $main-font-color;
+  resize: none;
+  font-size: 16px;
+  padding: 5px;
+
+  &:focus {
+    outline: 1px solid $main-font-color;
+  }
+}

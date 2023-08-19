@@ -3,51 +3,37 @@
 .root {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -100%;
   background-color: $additional-bg;
   min-height: 100vh;
   padding: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 70%;
   box-sizing: border-box;
-  // display: none;
+  transition: right .8s ease-in-out;
+
+  &.opened {
+    right: 0
+  }
 
   @media (max-width: 768px) {
     width: 100%;
   }
 }
 
-.header {
+.topContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
   text-align: center;
   margin: 0 0 20px 0;
   font-size: 20px;
   font-weight: 600;
-}
-
-.varBtnList {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px 0;
-  display: flex;
-  column-gap: 8px;
-  row-gap: 8px;
-  flex-wrap: wrap;
-}
-
-.btnListItem {
-  
-}
-
-.varBtn {
-  cursor: pointer;
-  border: 0;
-  border-radius: 10px;
-  padding: 5px 10px;
-  background-color: $main-bg;
-  background-color: $gray-button-color;
-  color: $var-button-color;
-  @extend %tplButtonEffects;
 }
 
 .conditionalBranchingBtn {
@@ -80,88 +66,6 @@
 .label {
   margin-bottom: 10px;
   font-size: 18px;
-}
-
-.textArea {
-  background-color: $main-bg;
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  color: $main-font-color;
-  resize: none;
-  font-size: 16px;
-  padding: 5px;
-}
-
-.branchContainer {
-  display: flex;
-  margin-bottom: 25px;
-  padding-top: 25px;
-}
-
-.closeBtnContainer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  
-  .closeBtn {
-    background-color: $main-bg;
-    border: none;
-    color: $main-font-color;
-    font-size: 25px;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: opacity .2s ease;
-    &::after {
-      cursor: auto;
-      pointer-events: none;
-      position: absolute;
-      height: 100%;
-      left: 48%;
-      bottom: -30px;
-      content: '';
-      border-left: 2px dashed $main-font-color;
-    }
-    &:hover {
-      opacity: .6;
-    }
-  }
-}
-
-.conditionalFieldset {
-  display: flex;
-  row-gap: 15px;
-  flex: 1 0 auto;
-  flex-direction: column;
-  border: none;
-  padding: 0;
-  .conditionalBlock {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    column-gap: 10px;
-  }
-  .conditionalLabel{
-    padding-top: 5px;
-    justify-self: end;
-
-    &.blue {
-      color: $conditional-color-if;
-    }
-    &.pink {
-      color: $conditional-color-then;
-    }
-    &.turquoise {
-      color: $conditional-color-else;
-    }
-  }
-
-  .conditionalInput {
-
-  }
 }
 
 .ctrlButtonsList {

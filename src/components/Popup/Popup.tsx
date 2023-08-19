@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, Dispatch, SetStateAction } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Popup.module.scss';
@@ -31,7 +31,7 @@ const Popup: FC<IPopupProps> = (props) => {
   return (
     <div onMouseDown={onClose} className={rootClassName}>
       <div onMouseDown={evt => evt.stopPropagation()} className={styles.container}>
-        <button onClick={onClose} className={styles.closeBtn}/>
+        <button type="button" onClick={onClose} className={styles.closeBtn}/>
         {children}
       </div>
     </div>

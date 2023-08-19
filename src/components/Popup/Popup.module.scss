@@ -31,8 +31,8 @@
 
 .closeBtn {
   position: absolute;
-  top: -40px;
-  right: -40px;
+  top: -35px;
+  right: -35px;
   padding: 0;
   border: none;
   width: 30px;
@@ -41,7 +41,6 @@
   transition: opacity 0.2s ease-out;
   cursor: pointer;
   color: $main-font-color;
-  // font-size: 30px;
   
   &::before,&::after {
     content: '';

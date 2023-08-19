@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction} from 'react';
+import { FC } from 'react';
 
 import {Popup, MessagePreview} from '../';
 

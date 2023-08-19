@@ -1,9 +1,14 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import styles from './StartButton.module.scss';
 
-const StartButton: FC = () => {
+interface IStartButtonProps {
+  onOpenEditor: () => void;
+}
+
+const StartButton: FC<IStartButtonProps> = ({onOpenEditor}) => {
+
   return (
-    <button type='button' className={styles.root}>Message Editor</button>
+    <button type='button' onClick={() => onOpenEditor()} className={styles.root}>Message Editor</button>
   )
 }
 

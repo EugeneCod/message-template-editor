@@ -2,20 +2,6 @@
 @import '../vendor/libs/normalize';
 @import './variables';
 
-.page {
-  // font-family: $app-font-family;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // -webkit-text-size-adjust: 100%;
-  // -ms-text-size-adjust: 100%;
-  // -moz-text-size-adjust: 100%;
-  // text-rendering: optimizeLegibility;
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // min-height: 100vh;
-}
-
 body {
   font-family: $app-font-family;
   -webkit-font-smoothing: antialiased;
@@ -28,8 +14,3 @@ body {
   background-color: $main-bg;
   color: $main-font-color;
 }
-
-// code {
-//   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-//     monospace;
-// }
