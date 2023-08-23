@@ -1,9 +1,7 @@
 @import '../../scss/variables.scss';
 
-.branchContainer {
+.inputLineContainer {
   display: flex;
-  margin-bottom: 25px;
-  padding-top: 25px;
 }
 
 .closeBtnContainer {
@@ -41,31 +39,19 @@
   }
 }
 
-.conditionalFieldset {
-  display: flex;
-  row-gap: 15px;
-  flex: 1 0 auto;
-  flex-direction: column;
-  border: none;
-  padding: 0;
-  margin: 0;
-  .conditionalBlock {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    column-gap: 10px;
-  }
-  .conditionalLabel{
-    padding-top: 5px;
-    justify-self: end;
-
-    &.blue {
-      color: $conditional-color-if;
-    }
-    &.pink {
-      color: $conditional-color-then;
-    }
-    &.turquoise {
-      color: $conditional-color-else;
-    }
-  }
+.coditionalBlock {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  column-gap: 10px;
+  flex: 1 1 auto;
 }
+
+// .conditionalFieldset {
+//   display: flex;
+//   row-gap: 15px;
+//   flex: 1 0 auto;
+//   flex-direction: column;
+//   border: none;
+//   padding: 0;
+//   margin: 0;
+// }

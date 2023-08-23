@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
 import styles from './VarButtonsSubwidget.module.scss';
-import { arrVarNames } from '../../utils/constants';
 
 interface VarButtonsSubwidgetProps {
+  arrVarNames: string[];
   onCLickVarBtn: (value: string) => void;
 }
 
 const VarButtonsSubwidget: FC<VarButtonsSubwidgetProps> = (props) => {
-  const {onCLickVarBtn} = props;
+  const {arrVarNames, onCLickVarBtn} = props;
   return (
     <ul className={styles.varBtnList}>
       {arrVarNames.map((value) => {

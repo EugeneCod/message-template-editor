@@ -1,0 +1,16 @@
+@import '../../scss/variables.scss';
+
+.conditionalLabel{
+  padding-top: 5px;
+  justify-self: end;
+
+  &.blue {
+    color: $conditional-color-if;
+  }
+  &.pink {
+    color: $conditional-color-then;
+  }
+  &.turquoise {
+    color: $conditional-color-else;
+  }
+}
