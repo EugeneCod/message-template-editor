@@ -3,6 +3,7 @@
 .conditionalLabel{
   padding-top: 5px;
   justify-self: end;
+  text-transform: uppercase;
 
   &.blue {
     color: $conditional-color-if;

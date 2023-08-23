@@ -93,11 +93,11 @@ const Editor: FC<IEditorProps> = (props) => {
           <span className={highlightedFrElse}>ELSE</span> &#40;else_value&#41;
         </button>
         <label className={styles.label}>Edit message</label>
-        <div className={styles.inputLines}>
+        {/* <div className={styles.inputLines}> */}
           {/* {sampleData[0].childIds.map((id) => ( */}
             <NodeTree nodeId={0} template={sampleData} onTextAreaChange={handleTextAreaChange}/>
           {/* ))} */}
-        </div>
+        {/* </div> */}
       </div>
       <ul className={styles.ctrlButtonsList}>
         <li className={styles.buttonsListItem}>

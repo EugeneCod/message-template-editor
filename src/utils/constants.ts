@@ -9,7 +9,7 @@ export const INITAIL_TEMPLATE: INodes = {
     childIds: [],
   },
 };
-export const MIN_TEXTAREA_HEIGHT: number = 46;
+export const MIN_TEXTAREA_HEIGHT: number = 56;
 
 
 export const sampleData: INodes = {
