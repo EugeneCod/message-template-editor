@@ -12,6 +12,14 @@ export const INITAIL_TEMPLATE: INodes = {
 export const MIN_TEXTAREA_HEIGHT: number = 56;
 
 
+
+// глубокое копирование объекта
+// const obj1 = {
+//   key: {id: 1},
+// };
+// const obj2 = {...obj1, key: {...obj1.key}};
+
+
 export const sampleData: INodes = {
   0: {
     id: 0,

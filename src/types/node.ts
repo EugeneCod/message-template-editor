@@ -21,10 +21,10 @@
 // }
 
 export interface INodes {
-  [index: number]: INodeData;
+  [index: number]: INode;
 }
 
-export interface INodeData {
+export interface INode {
   id: number;
   text: string;
   name: 'root' | 'if' | 'then' | 'else' | 'end';

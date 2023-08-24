@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState, useLayoutEffect } from 'react';
+import { ChangeEvent, SyntheticEvent, FC, useRef, useState, useLayoutEffect, } from 'react';
 
 import styles from './Textarea.module.scss';
 import { MIN_TEXTAREA_HEIGHT } from '../../utils/constants';
@@ -7,16 +7,20 @@ interface ITextareaProps {
   id: number;
   initialText: string;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>, id: number) => void;
+  onSelect: (event: SyntheticEvent<HTMLTextAreaElement, Event>, id: number) => void;
 }
 
-const Textarea: FC<ITextareaProps> = (props) => {
-  const { id, initialText, onChange } = props;
-  const textareaRef: any = useRef(null);
-  const [value, setValue] = useState(initialText);
 
+const Textarea: FC<ITextareaProps> = (props) => {
+  const { id, initialText, onChange, onSelect } = props;
+  const textareaRef: any = useRef(null);
+  
   function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    setValue(event.target.value);
     onChange(event, id);
+  }
+
+  function handleSelect(event: SyntheticEvent<HTMLTextAreaElement, Event>) {
+    onSelect(event, id);
   }
 
   useLayoutEffect(() => {
@@ -27,7 +31,7 @@ const Textarea: FC<ITextareaProps> = (props) => {
       textareaRef.current.scrollHeight,
       MIN_TEXTAREA_HEIGHT,
     )}px`;
-  }, [value]);
+  }, [initialText]);
 
   return (
     <textarea
@@ -35,7 +39,8 @@ const Textarea: FC<ITextareaProps> = (props) => {
       className={styles.textArea}
       ref={textareaRef}
       onChange={handleChange}
-      value={value}
+      onSelect={handleSelect}
+      value={initialText}
       style={{ minHeight: MIN_TEXTAREA_HEIGHT }}
     />
   );

@@ -1,4 +1,4 @@
-import { FC, ChangeEvent } from 'react';
+import { FC, ChangeEvent, SyntheticEvent } from 'react';
 
 import styles from './NodeTree.module.scss';
 import { Textarea, Label } from '..';
@@ -8,25 +8,31 @@ interface INodeTreeProps {
   nodeId: number;
   template: INodes;
   onTextAreaChange: (event: ChangeEvent<HTMLTextAreaElement>, id: number) => void;
+  onTextAreaSelect: (event: SyntheticEvent<HTMLTextAreaElement, Event>, id: number) => void;
+  onDeleteBranch: (nodeId: number) => void;
 }
 
 const NodeTree: FC<INodeTreeProps> = (props) => {
-  const { nodeId, template, onTextAreaChange } = props;
+  const { nodeId, template, onTextAreaChange, onTextAreaSelect, onDeleteBranch } = props;
   const node = template[nodeId];
   // В массиве идут то порядку Id узлов ответвлений
   // if, then, else, end
   const childIds = node.childIds;
 
+  function handleBtnClick() {
+    onDeleteBranch(nodeId);
+  }
+
   return (
     <>
       {node && (
         <div>
-          <Textarea id={nodeId} initialText={node.text} onChange={onTextAreaChange} />
+          <Textarea id={nodeId} initialText={node.text} onChange={onTextAreaChange} onSelect={onTextAreaSelect} />
           {childIds.length !== 0 && (
             <>
               <div className={styles.branchContainer}>
                 <div className={styles.closeBtnContainer}>
-                  <button type="button" className={styles.closeBtn}>
+                  <button type="button" className={styles.closeBtn} onClick={handleBtnClick}>
                     &#215;
                   </button>
                 </div>
@@ -37,6 +43,8 @@ const NodeTree: FC<INodeTreeProps> = (props) => {
                       nodeId={childIds[0]}
                       template={template}
                       onTextAreaChange={onTextAreaChange}
+                      onTextAreaSelect={onTextAreaSelect}
+                      onDeleteBranch={onDeleteBranch}
                     />
                   </div>
                   <div className={styles.conditionalBlock}>
@@ -45,6 +53,8 @@ const NodeTree: FC<INodeTreeProps> = (props) => {
                       nodeId={childIds[1]}
                       template={template}
                       onTextAreaChange={onTextAreaChange}
+                      onTextAreaSelect={onTextAreaSelect}
+                      onDeleteBranch={onDeleteBranch}
                     />
                   </div>
                   <div className={styles.conditionalBlock}>
@@ -53,11 +63,19 @@ const NodeTree: FC<INodeTreeProps> = (props) => {
                       nodeId={childIds[2]}
                       template={template}
                       onTextAreaChange={onTextAreaChange}
+                      onTextAreaSelect={onTextAreaSelect}
+                      onDeleteBranch={onDeleteBranch}
                     />
                   </div>
                 </fieldset>
               </div>
-              <Textarea id={childIds[3]} initialText={template[childIds[3]].text} onChange={onTextAreaChange} />
+              <NodeTree
+                nodeId={childIds[3]}
+                template={template}
+                onTextAreaChange={onTextAreaChange}
+                onTextAreaSelect={onTextAreaSelect}
+                onDeleteBranch={onDeleteBranch}
+              />
             </>
           )}
         </div>

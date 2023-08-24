@@ -1,11 +1,10 @@
-import { FC, useState, useEffect, ChangeEvent } from 'react';
+import { FC, useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Editor.module.scss';
 import { NodeTree, VarButtonsSubwidget } from '../';
 import { INITAIL_TEMPLATE, sampleData } from '../../utils/constants';
-import { INodes, INodeData } from '../../types/node';
-import { log } from 'console';
+import { INodes, INode } from '../../types/node';
 
 const cx = classNames.bind(styles);
 
@@ -30,11 +29,18 @@ const Editor: FC<IEditorProps> = (props) => {
     onOpenPopupWithMessagePreview,
   } = props;
 
+  // const iduse1 = useId();  формат ':r1:',':r2:' и т.д
+  // const iduse2 = useId();
+  // console.log(parseInt(iduse1));
+  // console.log(iduse2);
+
   const [lastCaretData, setLastCaretData] = useState({ textareaId: 0, position: 0 });
+  const [templateIsEmpty, setTemplateIsEmpty] = useState(true);
 
   useEffect(() => {
     const templateIsEmpty = Object.entries(template).length === 0;
     templateIsEmpty && onSetTemplate(INITAIL_TEMPLATE);
+    setTemplateIsEmpty(false);
   }, [template, onSetTemplate]);
 
   const rootStyles = cx({
@@ -58,28 +64,55 @@ const Editor: FC<IEditorProps> = (props) => {
     highlighted: true,
   });
 
+  function updateNodeText(newText: string, nodeId: number) {
+    const node = template[nodeId];
+    const newNode = { ...node, text: newText };
+    const newTemplate = { ...template, [nodeId]: newNode };
+    onSetTemplate(newTemplate);
+    console.log(newTemplate[nodeId]);
+  }
+
   function insertVariable(varName: string) {
-    const nextTemplate = {...template};
-    const lastActiveNode = nextTemplate[lastCaretData.textareaId];
+    const nodeId = lastCaretData.textareaId;
+    const lastActiveNode = template[nodeId];
     if (lastActiveNode) {
       const startString = lastActiveNode.text.slice(0, lastCaretData.position);
       const endString = lastActiveNode.text.slice(lastCaretData.position);
-      const resultString = `${startString}${varName}${endString}`;
-      updateNodeText(resultString, lastActiveNode, nextTemplate);
+      const resultString = `${startString}{${varName}}${endString}`;
+      updateNodeText(resultString, nodeId);
     }
   }
 
-  function updateNodeText(newText: string, node: INodeData, nextTemplate: INodes) {
-    node.text = newText;
-    onSetTemplate(nextTemplate);
+  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>, id: number) {
+    const textarea = event.target;
+    const newText = textarea.value;
+    updateNodeText(newText, id);
+  }
+
+  function handleTextAreaSelect(event: SyntheticEvent<HTMLTextAreaElement, Event>, id: number) {
+    const textarea = event.target as EventTarget & HTMLTextAreaElement;
+    setLastCaretData({
+      textareaId: parseInt(textarea.id),
+      position: textarea.selectionStart,
+    });
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    callbackSave();
   }
 
-  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>, id:number) {
+  function handleDeleteBranch(nodeId: number) {
+    const node = template[nodeId];
+    const removedNodes = node.childIds;
+    const newNode = { ...node, childIds: [] };
+    const newTemplate = { ...template, [nodeId]: newNode };
 
+    for (let id of removedNodes) {
+      delete newTemplate[id];
+    }
+
+    onSetTemplate(newTemplate);
   }
 
   return (
@@ -93,11 +126,15 @@ const Editor: FC<IEditorProps> = (props) => {
           <span className={highlightedFrElse}>ELSE</span> &#40;else_value&#41;
         </button>
         <label className={styles.label}>Edit message</label>
-        {/* <div className={styles.inputLines}> */}
-          {/* {sampleData[0].childIds.map((id) => ( */}
-            <NodeTree nodeId={0} template={sampleData} onTextAreaChange={handleTextAreaChange}/>
-          {/* ))} */}
-        {/* </div> */}
+        {!templateIsEmpty && (
+          <NodeTree
+            nodeId={0}
+            template={template}
+            onTextAreaChange={handleTextAreaChange}
+            onTextAreaSelect={handleTextAreaSelect}
+            onDeleteBranch={handleDeleteBranch}
+          />
+        )}
       </div>
       <ul className={styles.ctrlButtonsList}>
         <li className={styles.buttonsListItem}>
