@@ -14,14 +14,6 @@ interface ITextareaProps {
 const Textarea: FC<ITextareaProps> = (props) => {
   const { id, initialText, onChange, onSelect } = props;
   const textareaRef: any = useRef(null);
-  
-  function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    onChange(event, id);
-  }
-
-  function handleSelect(event: SyntheticEvent<HTMLTextAreaElement, Event>) {
-    onSelect(event, id);
-  }
 
   useLayoutEffect(() => {
     // Сброс высоты требуется при каждой перерисовке
@@ -32,6 +24,14 @@ const Textarea: FC<ITextareaProps> = (props) => {
       MIN_TEXTAREA_HEIGHT,
     )}px`;
   }, [initialText]);
+
+  function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    onChange(event, id);
+  }
+
+  function handleSelect(event: SyntheticEvent<HTMLTextAreaElement, Event>) {
+    onSelect(event, id);
+  }
 
   return (
     <textarea

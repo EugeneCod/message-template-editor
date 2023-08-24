@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
+import { FC, useMemo, useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Editor.module.scss';
@@ -29,14 +29,10 @@ const Editor: FC<IEditorProps> = (props) => {
     onOpenPopupWithMessagePreview,
   } = props;
 
-  // const iduse1 = useId();  формат ':r1:',':r2:' и т.д
-  // const iduse2 = useId();
-  // console.log(parseInt(iduse1));
-  // console.log(iduse2);
-
   const [lastCaretData, setLastCaretData] = useState({ textareaId: 0, position: 0 });
   const [templateIsEmpty, setTemplateIsEmpty] = useState(true);
-
+  const [activeTextArea, setActiveTextArea] = useState<HTMLTextAreaElement | null>(null);
+  
   useEffect(() => {
     const templateIsEmpty = Object.entries(template).length === 0;
     templateIsEmpty && onSetTemplate(INITAIL_TEMPLATE);
@@ -69,7 +65,19 @@ const Editor: FC<IEditorProps> = (props) => {
     const newNode = { ...node, text: newText };
     const newTemplate = { ...template, [nodeId]: newNode };
     onSetTemplate(newTemplate);
-    console.log(newTemplate[nodeId]);
+  }
+
+  const setTheCaretPosition = () => {
+    if (activeTextArea) {
+      const position = lastCaretData.position;
+      console.log(activeTextArea);
+      
+      activeTextArea.focus();
+      setTimeout(() => {
+        activeTextArea.setSelectionRange(position, position);
+      }, 1)
+      
+    };
   }
 
   function insertVariable(varName: string) {
@@ -80,6 +88,12 @@ const Editor: FC<IEditorProps> = (props) => {
       const endString = lastActiveNode.text.slice(lastCaretData.position);
       const resultString = `${startString}{${varName}}${endString}`;
       updateNodeText(resultString, nodeId);
+      setLastCaretData({
+        ...lastCaretData, 
+        position: lastCaretData.position + varName.length + 2,
+      }
+      );
+      setTheCaretPosition();
     }
   }
 
@@ -95,6 +109,9 @@ const Editor: FC<IEditorProps> = (props) => {
       textareaId: parseInt(textarea.id),
       position: textarea.selectionStart,
     });
+    if (textarea !== activeTextArea) {
+      setActiveTextArea(textarea);
+    }
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -107,11 +124,9 @@ const Editor: FC<IEditorProps> = (props) => {
     const removedNodes = node.childIds;
     const newNode = { ...node, childIds: [] };
     const newTemplate = { ...template, [nodeId]: newNode };
-
     for (let id of removedNodes) {
       delete newTemplate[id];
     }
-
     onSetTemplate(newTemplate);
   }
 

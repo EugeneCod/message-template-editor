@@ -17,7 +17,7 @@ const cx = classnames.bind(styles);
 
 const App: FC = () => {
   const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(false);
-  const [editorIsOpen, setEditorIsOpen] = useState(false);
+  const [editorIsOpen, setEditorIsOpen] = useState(true);
   const [template, setTemplate] = useState<INodes>({});
   
   const rootStyles = cx({
