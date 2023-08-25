@@ -25,7 +25,7 @@ export interface INodes {
 }
 
 export interface INode {
-  id: number;
+  // id: number;
   text: string;
   name: 'root' | 'if' | 'then' | 'else' | 'end';
   childIds: number[];
