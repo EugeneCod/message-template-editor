@@ -109,30 +109,43 @@ const Editor: FC<IEditorProps> = (props) => {
       setActiveTextArea(textarea);
     }
   }
-
+  
   function addConditionalBranch() {
-    //! понять почему targetNode не переключается на дочерний end узел
     const nodeId: number = lastCaretData.textareaId;
     let targetNode = template[nodeId];
-    console.log(targetNode.childIds);
+    const hasChildren = targetNode.childIds.length !== 0;
     if (targetNode.name === 'if') return; //Если текущий узел "if" - завершить выполнение.
-    if (targetNode.childIds.length) {//Если текущий узел имеет дочерние узлы - добавить
-      targetNode = template[targetNode.childIds[3]]; //ветку в его завершающий дочерний узел.
-    }
-    const currentIds = Object.keys(template).map(Number); //Получить числовой массив текущих id.
-    const nextId = Math.max(...currentIds) + 1; //Определить следующий id узла.
+    
     const startString = template[nodeId].text.slice(0, lastCaretData.position);
     const endString = template[nodeId].text.slice(lastCaretData.position);
+    let shiftedString = '';
+    
+    const newTemplate = {...template};
+
+    if (hasChildren) {//Если текущий узел имеет дочерние узлы - добавить
+      const newCurrentNode = {
+        ...targetNode,
+        text: startString,
+      };
+      newTemplate[nodeId] = newCurrentNode;
+      targetNode = template[targetNode.childIds[3]]; //ветку в его завершающий дочерний узел.
+      shiftedString = targetNode.text;
+    }
+
+    const currentIds = Object.keys(template).map(Number); //Получить числовой массив текущих id.
+    const nextId = Math.max(...currentIds) + 1; //Определить следующий id узла.
+    
     const newNode = {
       ...targetNode,
       childIds: [nextId, nextId + 1, nextId + 2, nextId + 3],
-      text: startString,
+      text: hasChildren ? endString : startString,
     };
-    const newTemplate = { ...template, [nodeId]: newNode };
-    newTemplate[nextId] = { text: '', name: 'if', childIds: [] };
-    newTemplate[nextId + 1] = { text: '', name: 'then', childIds: [] };
-    newTemplate[nextId + 2] = { text: '', name: 'else', childIds: [] };
-    newTemplate[nextId + 3] = { text: endString, name: 'end', childIds: [] };
+
+    newTemplate[targetNode.id] = newNode;
+    newTemplate[nextId] = { id: nextId, text: '', name: 'if', childIds: [] };
+    newTemplate[nextId + 1] = { id: nextId + 1, text: '', name: 'then', childIds: [] };
+    newTemplate[nextId + 2] = { id: nextId + 2, text: '', name: 'else', childIds: [] };
+    newTemplate[nextId + 3] = { id: nextId + 3, text: hasChildren ? shiftedString : endString, name: 'end', childIds: [] };
     onSetTemplate(newTemplate);
   }
 
@@ -153,23 +166,23 @@ const Editor: FC<IEditorProps> = (props) => {
   } 
 
   function handleDeleteBranch(nodeId: number) {
-    const node = template[nodeId];
-    const removedNodes = node.childIds;
-
-    const endText = template[node.childIds[3]].text;
-    const resultString = `${node.text}${endText}`;
-
-    const newNode = { ...node, childIds: [], text: resultString };
-    const newTemplate = { ...template, [nodeId]: newNode };
-
-    removedNodes.forEach(id => {
+    const node = template[nodeId]; //Определить текущий активный узел.
+    const removedNodes = node.childIds; //Определить ids его дочерних элементов.
+    const childEnd = template[removedNodes[3]]; //Определить его дочерний 'end' элемент.
+    const endText = childEnd.text; //Сохранить текст его дочернего 'end' элемента.
+    const resultString = `${node.text}${endText}`; //Сохранить склеенный начальный тест с ранее сохраненным.
+    const newNode = { ...node, childIds: childEnd.childIds, text: resultString }; //Создать новый узел с обновленным тестом и массивом дочерних id.
+    const newTemplate = { ...template, [nodeId]: newNode }; //Создать новый шаблон с раннее объявленным новым узлом.
+    delete template[childEnd.id]; //Удалить дочеринй 'end' элемент.
+    removedNodes.pop(); //Удалить из массива подготовленных к удалению индексов последний, указывающий на childEnd.
+    removedNodes.forEach(id => { //Удалить все вложенные дочерние узлы у 'if', 'then', 'else'.
       recursiveChildDeletion(id, newTemplate)
     })
 
     for (let id of removedNodes) {
-      delete newTemplate[id];
+      delete newTemplate[id]; // Удалить оставшиеся на верхнем уровне узлы 'if', 'then', 'else'.
     }
-    onSetTemplate(newTemplate);
+    onSetTemplate(newTemplate); // Обновить шаблон.
   }
 
 
