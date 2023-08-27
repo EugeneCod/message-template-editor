@@ -1,31 +1,31 @@
-// Сохраниение в localStorage
-//    localStorage.setItem('initialMovies', JSON.stringify(foundMovies));
-// Получение из localStorage
-//    const resultMovies = JSON.parse(localStorage.getItem('resultMovies')) || [];
-// Удаление
-//    localStorage.removeItem('resultMovies');
-
 import { FC, useEffect, useState } from 'react';
-import classnames from 'classnames/bind'
 
 import styles from './App.module.scss';
-import { StartButton, Editor, PopupWithMessgePreview } from '../';
 import { ARR_VAR_NAMES } from '../../utils/constants';
 import { INodes } from '../../types/node';
-
-const cx = classnames.bind(styles);
+import useConfirm from '../../hooks/useConfirm';
+import {
+  StartButton,
+  Editor,
+  PopupWithMessgePreview,
+  PopupWithConfirm,
+  PopupWithNotification,
+} from '../';
 
 const App: FC = () => {
   const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(false);
-  const [editorIsOpen, setEditorIsOpen] = useState(true);
+  const [popupWithNotificationOptions, setPopupWithNotificationOptions] = useState({
+    isOpen: false,
+    text: '',
+    status: false,
+  });
+  const [popupWithConfirmOptions, setPopupWithConfirmOptions] = useState({
+    isOpen: false,
+    text: '',
+  });
+  const [editorIsOpen, setEditorIsOpen] = useState(false);
   const [template, setTemplate] = useState<INodes>({});
-  
-  const rootStyles = cx({
-    root: true,
-    locked: !editorIsOpen,
-  })
-
-  
+  const { confirm, handleConfirm, handleCancel } = useConfirm(setPopupWithConfirmOptions);
 
   useEffect(() => {
     //Проверить, есть ли в локальном хранилище сохраненный шаблон
@@ -41,8 +41,27 @@ const App: FC = () => {
     setPopupWithMessagePreviewIsOpen((prev) => !prev);
   }
 
+  function openPopupWithNotification(text: string, status: boolean) {
+    setPopupWithNotificationOptions({ isOpen: true, text, status });
+  }
+
+  function closePopupWithNotification() {
+    setPopupWithNotificationOptions({ isOpen: false, text: '', status: false });
+  }
+
   function toggleOpenEditor() {
     setEditorIsOpen((prev) => !prev);
+  }
+
+  async function confirmCloseEditor() {
+    const isConfirmed = await confirm('Сохранить шаблон перед выходом?');
+    if (isConfirmed) {
+      callbackSave().then(() => {
+        toggleOpenEditor();
+      })
+    } else {
+      toggleOpenEditor();
+    }
   }
 
   function handleUpdateTemplate(template: INodes) {
@@ -50,11 +69,27 @@ const App: FC = () => {
   }
 
   async function callbackSave() {
-    localStorage.setItem('template', JSON.stringify(template));
+    updateLocalStorage().then((res) => {
+      openPopupWithNotification(res, true);
+    }).catch((err) => {
+      openPopupWithNotification(err, false);
+    })
+  }
+
+  async function updateLocalStorage() {
+    return new Promise<string>((resolve, reject) => {
+      localStorage.setItem('template', JSON.stringify(template));
+      const savedTemplate = localStorage.getItem('template');
+      if (savedTemplate) {
+        resolve('Шаблон успешно сохранен!');
+      } else reject(new Error('При сохранении шаблона произошла ошибка!'));
+    });
+    // localStorage.setItem('template', JSON.stringify(template));
+    // openPopupWithNotification('Шаблон успешно сохранен!')
   }
 
   return (
-    <main className={rootStyles}>
+    <main className={styles.root}>
       <StartButton onOpenEditor={toggleOpenEditor} />
       <Editor
         arrVarNames={ARR_VAR_NAMES}
@@ -62,12 +97,24 @@ const App: FC = () => {
         onSetTemplate={handleUpdateTemplate}
         callbackSave={callbackSave}
         isOpen={editorIsOpen}
-        onCloseEditor={toggleOpenEditor}
+        onCloseEditor={confirmCloseEditor}
         onOpenPopupWithMessagePreview={togglePopupMessagePreview}
       />
       <PopupWithMessgePreview
         isOpen={popupWithMessagePreviewIsOpen}
         onClose={togglePopupMessagePreview}
+      />
+      <PopupWithConfirm
+        isOpen={popupWithConfirmOptions.isOpen}
+        question={popupWithConfirmOptions.text}
+        onConfirm={handleConfirm}
+        onClose={handleCancel}
+      />
+      <PopupWithNotification
+        isOpen={popupWithNotificationOptions.isOpen}
+        notification={popupWithNotificationOptions.text}
+        status={popupWithNotificationOptions.status}
+        onClose={closePopupWithNotification}
       />
     </main>
   );

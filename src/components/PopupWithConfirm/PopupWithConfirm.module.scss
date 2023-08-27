@@ -1,0 +1,41 @@
+@import '../../scss/variables.scss';
+
+.dialogContainer {
+  background-color: $additional-bg;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  justify-content: center;
+  max-width: 300px;
+  padding: 20px;
+}
+
+.text {
+  margin: 0 0 25px 0;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: end;
+  column-gap: 10px;
+}
+
+.button {
+  padding: 5px 0;
+  border: none;
+  border-radius: 5px;
+  width: 60px ;
+  font-size: 14px;
+  color: #fff;
+  background-color: $control-button-background;
+
+  &:nth-child(2) {
+    background-color: $control-button-background-hl;
+  }
+}

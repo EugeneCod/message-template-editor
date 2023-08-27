@@ -173,7 +173,7 @@ const Editor: FC<IEditorProps> = (props) => {
     const resultString = `${node.text}${endText}`; //Сохранить склеенный начальный тест с ранее сохраненным.
     const newNode = { ...node, childIds: childEnd.childIds, text: resultString }; //Создать новый узел с обновленным тестом и массивом дочерних id.
     const newTemplate = { ...template, [nodeId]: newNode }; //Создать новый шаблон с раннее объявленным новым узлом.
-    delete template[childEnd.id]; //Удалить дочеринй 'end' элемент.
+    delete newTemplate[childEnd.id]; //Удалить дочеринй 'end' элемент.
     removedNodes.pop(); //Удалить из массива подготовленных к удалению индексов последний, указывающий на childEnd.
     removedNodes.forEach(id => { //Удалить все вложенные дочерние узлы у 'if', 'then', 'else'.
       recursiveChildDeletion(id, newTemplate)

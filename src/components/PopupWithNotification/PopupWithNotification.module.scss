@@ -1,0 +1,32 @@
+@import '../../scss/variables.scss';
+
+.notificationBlock {
+  background-color: $additional-bg;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px;
+  padding: 20px;
+}
+  
+.image {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 15px;
+  @media (max-width: 768px) {
+    width: 120px;
+  height: 120px;
+  }
+}
+
+.text {
+  margin: 0;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+}
