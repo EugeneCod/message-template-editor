@@ -13,7 +13,7 @@ import {
 } from '../';
 
 const App: FC = () => {
-  const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(true);
+  const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(false);
   const [popupWithNotificationOptions, setPopupWithNotificationOptions] = useState({
     isOpen: false,
     text: '',

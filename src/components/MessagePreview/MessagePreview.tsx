@@ -2,6 +2,7 @@ import { FC, useState, useEffect, ChangeEvent } from 'react';
 
 import styles from './MessagePreview.module.scss';
 import { INodes, IVarData } from '../../types';
+import getMessage from '../../utils/getMessage';
 
 interface MessagePreviewProps {
   arrVarNames: string[];
@@ -21,12 +22,14 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
       newVarData[value] = ''; //объект вида {[variableName:string]:string}
     });
     setVarData(newVarData);
+    setMessage(getMessage(newVarData, template))
   }, []);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const varName = event.target.id;
     const newVarData = { ...varData, [varName]: event.target.value };
     setVarData(newVarData);
+    setMessage(getMessage(newVarData, template));
   }
 
   return (
