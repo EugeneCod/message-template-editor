@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import styles from './App.module.scss';
 import { ARR_VAR_NAMES } from '../../utils/constants';
-import { INodes } from '../../types/node';
+import { INodes } from '../../types';
 import useConfirm from '../../hooks/useConfirm';
 import {
   StartButton,
@@ -13,7 +13,7 @@ import {
 } from '../';
 
 const App: FC = () => {
-  const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(false);
+  const [popupWithMessagePreviewIsOpen, setPopupWithMessagePreviewIsOpen] = useState(true);
   const [popupWithNotificationOptions, setPopupWithNotificationOptions] = useState({
     isOpen: false,
     text: '',

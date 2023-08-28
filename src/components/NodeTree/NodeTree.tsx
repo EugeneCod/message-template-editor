@@ -2,7 +2,7 @@ import { FC, ChangeEvent, SyntheticEvent } from 'react';
 
 import styles from './NodeTree.module.scss';
 import { Textarea, Label } from '..';
-import { INodes } from '../../types/node';
+import { INodes } from '../../types';
 
 interface INodeTreeProps {
   nodeId: number;
@@ -27,7 +27,12 @@ const NodeTree: FC<INodeTreeProps> = (props) => {
     <>
       {node && (
         <div>
-          <Textarea id={nodeId} initialText={node.text} onChange={onTextAreaChange} onSelect={onTextAreaSelect} />
+          <Textarea
+            id={nodeId}
+            initialText={node.text}
+            onChange={onTextAreaChange}
+            onSelect={onTextAreaSelect}
+          />
           {childIds.length !== 0 && (
             <>
               <div className={styles.branchContainer}>
