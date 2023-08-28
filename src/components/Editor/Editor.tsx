@@ -12,7 +12,7 @@ interface IEditorProps {
   arrVarNames: string[];
   template: INodes;
   onSetTemplate: (template: INodes) => void;
-  callbackSave: () => Promise<void>;
+  callbackSave: () => Promise<boolean>;
   isOpen: boolean;
   onCloseEditor: () => void;
   onOpenPopupWithMessagePreview: () => void;

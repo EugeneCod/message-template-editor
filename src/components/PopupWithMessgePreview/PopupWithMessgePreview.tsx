@@ -1,17 +1,21 @@
 import { FC } from 'react';
 
 import {Popup, MessagePreview} from '../';
+import { INodes } from '../../types/node';
 
 interface IPopupWithMessgePreviewProps {
   isOpen: boolean;
   onClose: () => void;
+  arrVarNames: string[];
+  template: INodes;
+
 }
 
 const PopupWithMessgePreview: FC<IPopupWithMessgePreviewProps> = (props) => {
-  const {isOpen, onClose} = props;
+  const {isOpen, onClose, arrVarNames, template} = props;
   return (
     <Popup isOpen={isOpen} onClose={onClose}>
-      <MessagePreview/>
+      <MessagePreview arrVarNames={arrVarNames} template={template} onClose={onClose}/>
     </Popup>
   )
 }

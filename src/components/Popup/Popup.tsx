@@ -28,14 +28,16 @@ const Popup: FC<IPopupProps> = (props) => {
     opened: isOpen,
   });
 
-  return (
+  const component = isOpen && (
     <div onMouseDown={onClose} className={rootClassName}>
       <div onMouseDown={evt => evt.stopPropagation()} className={styles.container}>
         <button type="button" onClick={onClose} className={styles.closeBtn}/>
         {children}
       </div>
     </div>
-  );
+  )
+
+  return component || null;
 };
 
 export default Popup;

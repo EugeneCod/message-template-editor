@@ -56,9 +56,8 @@ const App: FC = () => {
   async function confirmCloseEditor() {
     const isConfirmed = await confirm('Сохранить шаблон перед выходом?');
     if (isConfirmed) {
-      callbackSave().then(() => {
-        toggleOpenEditor();
-      })
+      const isSaved = await callbackSave();
+      isSaved && toggleOpenEditor();
     } else {
       toggleOpenEditor();
     }
@@ -68,12 +67,16 @@ const App: FC = () => {
     setTemplate(template);
   }
 
-  async function callbackSave() {
-    updateLocalStorage().then((res) => {
-      openPopupWithNotification(res, true);
-    }).catch((err) => {
-      openPopupWithNotification(err, false);
-    })
+  async function callbackSave(): Promise<boolean> {
+    return updateLocalStorage()
+      .then((res) => {
+        openPopupWithNotification(res, true);
+        return true;
+      })
+      .catch((err) => {
+        openPopupWithNotification(err.message, false);
+        return false;
+      });
   }
 
   async function updateLocalStorage() {
@@ -84,8 +87,6 @@ const App: FC = () => {
         resolve('Шаблон успешно сохранен!');
       } else reject(new Error('При сохранении шаблона произошла ошибка!'));
     });
-    // localStorage.setItem('template', JSON.stringify(template));
-    // openPopupWithNotification('Шаблон успешно сохранен!')
   }
 
   return (
@@ -103,6 +104,8 @@ const App: FC = () => {
       <PopupWithMessgePreview
         isOpen={popupWithMessagePreviewIsOpen}
         onClose={togglePopupMessagePreview}
+        arrVarNames={ARR_VAR_NAMES}
+        template={template}
       />
       <PopupWithConfirm
         isOpen={popupWithConfirmOptions.isOpen}

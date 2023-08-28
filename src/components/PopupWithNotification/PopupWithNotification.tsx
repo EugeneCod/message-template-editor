@@ -15,15 +15,18 @@ interface PopupWithNotificationProps {
 const PopupWithNotification: FC<PopupWithNotificationProps> = (props) => {
   const { isOpen, notification, status, onClose } = props;
 
-  const component = isOpen && (
+  return (
     <Popup isOpen={isOpen} onClose={onClose}>
       <div className={styles.notificationBlock}>
-        <img className={styles.image} src={status === true ? imageSuccess : imageFailure} alt="Success or failure" />
+        <img
+          className={styles.image}
+          src={status === true ? imageSuccess : imageFailure}
+          alt="Success or failure"
+        />
         <p className={styles.text}>{notification}</p>
       </div>
     </Popup>
   );
-  return component || null;
 };
 
 export default PopupWithNotification;

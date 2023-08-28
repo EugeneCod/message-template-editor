@@ -27,6 +27,7 @@
 }
 
 .button {
+  cursor: pointer;
   padding: 5px 0;
   border: none;
   border-radius: 5px;
@@ -34,6 +35,14 @@
   font-size: 14px;
   color: #fff;
   background-color: $control-button-background;
+  transition: opacity .1s ease;
+
+  &:hover {
+    opacity: .8;
+  }
+  &:active {
+    opacity: .6;
+  }
 
   &:nth-child(2) {
     background-color: $control-button-background-hl;

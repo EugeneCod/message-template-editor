@@ -8,13 +8,12 @@ interface IPopupWithConfirmProps {
   question?: string;
   onConfirm: () => void;
   onClose: () => void;
-  
 }
 
 const PopupWithConfirm: FC<IPopupWithConfirmProps> = (props) => {
   const { isOpen, question, onConfirm, onClose } = props;
 
-  const component = isOpen &&(
+  return (
     <Popup isOpen={isOpen} onClose={onClose}>
       <div className={styles.dialogContainer}>
         <p className={styles.text}>{question ? question : 'Подтвердить действие?'}</p>
@@ -28,9 +27,7 @@ const PopupWithConfirm: FC<IPopupWithConfirmProps> = (props) => {
         </div>
       </div>
     </Popup>
-  )
-
-  return component || null;
+  );
 };
 
 export default PopupWithConfirm;

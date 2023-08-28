@@ -1,8 +1,38 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 import styles from './MessagePreview.module.scss';
+import { INodes } from '../../types/node';
 
-const MessagePreview: FC = () => {
+interface MessagePreviewProps {
+  arrVarNames: string[];
+  template: INodes;
+  onClose: () => void;
+}
+
+interface IVarData {
+  [key: string]: string;
+}
+
+// const defaultVarData: {[key: string]: string} = {};
+
+const MessagePreview: FC<MessagePreviewProps> = (props) => {
+  const {arrVarNames, template, onClose} = props;
+  const [varData, setVarData] = useState<IVarData>({});
+  
+  useEffect(() => {
+    const newVarData = {...varData};
+    arrVarNames.forEach(value => { //Преобразовать массив переменных в
+      newVarData[value] = ''; //объект вида {[variableName:string]:string}
+    })
+    setVarData(newVarData);
+  }, [arrVarNames, varData]);
+
+  function handleInput(event: any, varName: string) {
+    const newVarData = {...varData, [varName]: event.target.value}
+    setVarData(newVarData);
+  }
+
+
   return (
   <section className={styles.root}>
     <h2 className={styles.title}>Message preview</h2>
