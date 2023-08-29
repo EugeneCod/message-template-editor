@@ -3,15 +3,15 @@ import { FC, useState, useEffect, ChangeEvent } from 'react';
 import styles from './MessagePreview.module.scss';
 import { INodes, IVarData } from '../../types';
 import getMessage from '../../utils/getMessage';
+import useDebounce from '../../hooks/useDebounce';
 
 interface MessagePreviewProps {
   arrVarNames: string[];
   template: INodes;
-  onClose: () => void;
 }
 
 const MessagePreview: FC<MessagePreviewProps> = (props) => {
-  const { arrVarNames, template, onClose } = props;
+  const { arrVarNames, template } = props;
   const [message, setMessage] = useState('');
   const [varData, setVarData] = useState<IVarData>({});
 
@@ -19,17 +19,25 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
     const newVarData = { ...varData };
     arrVarNames.forEach((value) => {
       //Преобразовать массив переменных в
-      newVarData[value] = ''; //объект вида {[variableName:string]:string}
+      //объект вида {[variableName:string]:string}
+      newVarData[value] = '';
     });
     setVarData(newVarData);
-    setMessage(getMessage(newVarData, template))
+    setMessage(getMessage(newVarData, template));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Обновить сообщение
+  const updateMessage = useDebounce((newVarData: { [x: string]: string }) => {
+    setMessage(getMessage(newVarData, template));
+  }, 400); // Задержка нового вызова в милисекундах
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const varName = event.target.id;
     const newVarData = { ...varData, [varName]: event.target.value };
     setVarData(newVarData);
-    setMessage(getMessage(newVarData, template));
+    // setMessage(getMessage(newVarData, template));
+    updateMessage(newVarData);
   }
 
   return (

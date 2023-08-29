@@ -5,7 +5,6 @@ import styles from './Editor.module.scss';
 import { NodeTree, VarButtonsSubwidget } from '../';
 import { INITAIL_TEMPLATE } from '../../utils/constants';
 import { INodes } from '../../types';
-import { log } from 'console';
 
 const cx = classNames.bind(styles);
 
@@ -110,8 +109,6 @@ const Editor: FC<IEditorProps> = (props) => {
       setActiveTextArea(textarea);
     }
   }
-  console.log(template);
-  console.log(JSON.parse(JSON.stringify(template)));
 
   function addConditionalBranch() {
     const node = template[lastCaretData.textareaId];
