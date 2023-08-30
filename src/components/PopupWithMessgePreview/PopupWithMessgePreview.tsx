@@ -14,7 +14,7 @@ const PopupWithMessgePreview: FC<IPopupWithMessgePreviewProps> = (props) => {
   const { isOpen, onClose, arrVarNames, template } = props;
   return (
     <Popup isOpen={isOpen} onClose={onClose}>
-      <MessagePreview arrVarNames={arrVarNames} template={template} />
+      <MessagePreview arrVarNames={arrVarNames} template={template} onClose={onClose} />
     </Popup>
   );
 };

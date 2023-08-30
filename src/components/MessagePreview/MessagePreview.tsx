@@ -8,12 +8,14 @@ import useDebounce from '../../hooks/useDebounce';
 interface MessagePreviewProps {
   arrVarNames: string[];
   template: INodes;
+  onClose: () => void;
 }
 
 const MessagePreview: FC<MessagePreviewProps> = (props) => {
-  const { arrVarNames, template } = props;
+  const { arrVarNames, template, onClose } = props;
   const [message, setMessage] = useState('');
   const [varData, setVarData] = useState<IVarData>({});
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     const newVarData = { ...varData };
@@ -40,10 +42,34 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
     updateMessage(newVarData);
   }
 
+  // Функция для копирования текста в буфер обмена
+  async function copyTextToClipboard(text: string) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      // Для IE11
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+  // Обработчик клика по кнопке копирования текста
+  const handleCopyClick = () => {
+    copyTextToClipboard(message)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <section className={styles.root}>
       <h2 className={styles.title}>Message preview</h2>
-      <div  className={styles.viewingWindow}>{message}</div>
+      <div className={styles.viewingWindow}>{message}</div>
       <h3 className={styles.title}>Variables</h3>
       <ul className={styles.varList}>
         {arrVarNames.map((value) => (
@@ -54,6 +80,14 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
             <input id={value} className={styles.input} onChange={handleChange} />
           </li>
         ))}
+      </ul>
+      <ul className={styles.buttonsList}>
+        <li className={styles.buttonsListItem}>
+          <button onClick={handleCopyClick} className={styles.button} type="button">{isCopied ? 'Copied!' : 'Copy'}</button>
+        </li>
+        <li className={styles.buttonsListItem}>
+        <button onClick={onClose} className={`${styles.button} ${styles.highlighted}`} type="button">Close</button>
+        </li>
       </ul>
     </section>
   );
