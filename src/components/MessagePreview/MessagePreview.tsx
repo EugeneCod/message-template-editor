@@ -25,22 +25,23 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
       newVarData[value] = '';
     });
     setVarData(newVarData);
-    setMessage(getMessage(newVarData, template));
+    setMessage(getMessage(template, newVarData));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Обновить сообщение
+  // Обновить сообщение c задержкой
   const updateMessage = useDebounce((newVarData: { [x: string]: string }) => {
-    setMessage(getMessage(newVarData, template));
+    setMessage(getMessage(template, newVarData));
   }, 400); // Задержка нового вызова в милисекундах
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const varName = event.target.id;
     const newVarData = { ...varData, [varName]: event.target.value };
     setVarData(newVarData);
-    // setMessage(getMessage(newVarData, template));
     updateMessage(newVarData);
   }
+  console.log(template);
+  
 
   // Функция для копирования текста в буфер обмена
   async function copyTextToClipboard(text: string) {
@@ -69,7 +70,7 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
   return (
     <section className={styles.root}>
       <h2 className={styles.title}>Message preview</h2>
-      <div className={styles.viewingWindow}>{message}</div>
+      <p className={styles.viewingWindow}>{message}</p>
       <h3 className={styles.title}>Variables</h3>
       <ul className={styles.varList}>
         {arrVarNames.map((value) => (

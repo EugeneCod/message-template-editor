@@ -1,12 +1,12 @@
 import { INode, INodes, IVarData } from '../types';
 
-function getMessage(varData: IVarData, template: INodes) {
+function getMessage(template: INodes, values: IVarData) {
   const templateIsEmpty = Object.entries(template).length === 0;
   if (templateIsEmpty) {
     return '';
   }
   const rootNode = template[0];
-  const message = generateMessageFromTree(rootNode, template, varData);
+  const message = generateMessageFromTree(rootNode, template, values);
   return message;
 }
 

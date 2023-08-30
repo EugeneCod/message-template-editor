@@ -110,6 +110,7 @@ const Editor: FC<IEditorProps> = (props) => {
     }
   }
 
+  // Добавить условную конструкцию
   function addConditionalBranch() {
     const node = template[lastCaretData.textareaId];
     if (node.name === 'if') return;
@@ -133,46 +134,6 @@ const Editor: FC<IEditorProps> = (props) => {
     };
     onSetTemplate(newTemplate);
   }
-
-/*    function addConditionalBranch() {
-    const nodeId: number = lastCaretData.textareaId;
-    let targetNode = template[nodeId];
-    const hasChildren = targetNode.childIds.length !== 0;
-    if (targetNode.name === 'if') return; //Если текущий узел "if" - завершить выполнение.
-    const startString = template[nodeId].text.slice(0, lastCaretData.position);
-    const endString = template[nodeId].text.slice(lastCaretData.position);
-    let shiftedString = '';
-    const newTemplate = { ...template };
-    if (hasChildren) {
-      //Если текущий узел имеет дочерние узлы - добавить
-      //ветку в его завершающий дочерний узел.
-      const newCurrentNode = {
-        ...targetNode,
-        text: startString,
-      };
-      newTemplate[nodeId] = newCurrentNode;
-      targetNode = template[targetNode.childIds[3]]; 
-      shiftedString = targetNode.text;
-    }
-    const currentIds = Object.keys(template).map(Number); //Получить числовой массив текущих id.
-    const nextId = Math.max(...currentIds) + 1; //Определить следующий id узла.
-    const newNode = {
-      ...targetNode,
-      childIds: [nextId, nextId + 1, nextId + 2, nextId + 3],
-      text: hasChildren ? endString : startString,
-    };
-    newTemplate[targetNode.id] = newNode;
-    newTemplate[nextId] = { id: nextId, text: '', name: 'if', childIds: [] };
-    newTemplate[nextId + 1] = { id: nextId + 1, text: '', name: 'then', childIds: [] };
-    newTemplate[nextId + 2] = { id: nextId + 2, text: '', name: 'else', childIds: [] };
-    newTemplate[nextId + 3] = {
-      id: nextId + 3,
-      text: hasChildren ? shiftedString : endString,
-      name: 'end',
-      childIds: [],
-    };
-    onSetTemplate(newTemplate);
-  } */
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -25,22 +25,27 @@ const App: FC = () => {
   });
   const [editorIsOpen, setEditorIsOpen] = useState(false);
   const [template, setTemplate] = useState<INodes>({});
+  const [arrVarNames, setArrVarNames] = useState(ARR_VAR_NAMES);
   const { confirm, handleConfirm, handleCancel } = useConfirm(setPopupWithConfirmOptions);
 
   useEffect(() => {
     //Проверить, есть ли в локальном хранилище сохраненный шаблон
-    // и обновить текущей шаблон в этом случае
+    //и переменные, и обновить текущие в этом случае
     const savedTemplateJson = localStorage.getItem('template');
-    if (savedTemplateJson === null) {
-      return;
+    const savedArrVarNames = localStorage.getItem('arrVarNames');
+    if (savedTemplateJson !== null) {
+      setTemplate(JSON.parse(savedTemplateJson));
     }
-    setTemplate(JSON.parse(savedTemplateJson));
+    if (savedArrVarNames !== null) {
+      setArrVarNames(JSON.parse(savedArrVarNames));
+    }
   }, []);
 
   function togglePopupMessagePreview() {
     setPopupWithMessagePreviewIsOpen((prev) => !prev);
   }
 
+  // Открыть окно с уведомлением (status определяет одну из двух картинок)
   function openPopupWithNotification(text: string, status: boolean) {
     setPopupWithNotificationOptions({ isOpen: true, text, status });
   }
@@ -53,6 +58,8 @@ const App: FC = () => {
     setEditorIsOpen((prev) => !prev);
   }
 
+  // Закрытие редактора с использованием диалогового окна с предложением
+  // сохранить текущий шаблон
   async function confirmCloseEditor() {
     const isConfirmed = await confirm('Сохранить шаблон перед выходом?');
     if (isConfirmed) {
@@ -67,6 +74,8 @@ const App: FC = () => {
     setTemplate(template);
   }
 
+  // Функция сохранения текущего шаблона в локальном хранилище
+  // с показом окна уведомления
   async function callbackSave(): Promise<boolean> {
     return updateLocalStorage()
       .then((res) => {
@@ -93,7 +102,7 @@ const App: FC = () => {
     <main className={styles.root}>
       <StartButton onOpenEditor={toggleOpenEditor} />
       <Editor
-        arrVarNames={ARR_VAR_NAMES}
+        arrVarNames={arrVarNames}
         template={template}
         onSetTemplate={handleUpdateTemplate}
         callbackSave={callbackSave}
@@ -104,7 +113,7 @@ const App: FC = () => {
       <PopupWithMessgePreview
         isOpen={popupWithMessagePreviewIsOpen}
         onClose={togglePopupMessagePreview}
-        arrVarNames={ARR_VAR_NAMES}
+        arrVarNames={arrVarNames}
         template={template}
       />
       <PopupWithConfirm
