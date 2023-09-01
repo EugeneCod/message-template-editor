@@ -65,6 +65,7 @@ const Editor: FC<IEditorProps> = (props) => {
     highlighted: true,
   });
 
+  // Обновить текст в узле шаблона
   function updateNodeText(newText: string, nodeId: number) {
     const node = template[nodeId];
     const newNode = { ...node, text: newText };
@@ -72,6 +73,7 @@ const Editor: FC<IEditorProps> = (props) => {
     onSetTemplate(newTemplate);
   }
 
+  // Отобразить курсор в последеней автивной области ввода
   const setTheCaretPosition = (caretData: ILastCaretData) => {
     if (activeTextArea) {
       const position = caretData.position;
@@ -82,6 +84,7 @@ const Editor: FC<IEditorProps> = (props) => {
     }
   };
 
+  // Вставить переменную в область ввода согласно позиции каретки с возможным раздвижением текста
   function insertVariable(varName: string) {
     const nodeId = lastCaretData.textareaId;
     const lastActiveNode = template[nodeId];
@@ -99,12 +102,14 @@ const Editor: FC<IEditorProps> = (props) => {
     }
   }
 
+  // Обработчик ввода текста
   function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>, id: number) {
     const textarea = event.target;
     const newText = textarea.value;
     updateNodeText(newText, id);
   }
 
+  // Обработчик выбора поля ввода для занесения в состояние последней активной области
   function handleTextAreaSelect(event: SyntheticEvent<HTMLTextAreaElement, Event>, id: number) {
     const textarea = event.target as EventTarget & HTMLTextAreaElement;
     setLastCaretData({
@@ -116,7 +121,8 @@ const Editor: FC<IEditorProps> = (props) => {
     }
   }
 
-  // Добавить условную конструкцию
+  // Добавить условную конструкцию в область ввода но основании
+  // данных о последнем положении каретки
   function addConditionalBranch() {
     const node = template[lastCaretData.textareaId];
     if (node.name === 'if') return;
@@ -138,6 +144,7 @@ const Editor: FC<IEditorProps> = (props) => {
       name: 'end',
       childIds: [...nodeChildren],
     };
+    setTheCaretPosition({...lastCaretData});
     onSetTemplate(newTemplate);
   }
 
@@ -146,6 +153,7 @@ const Editor: FC<IEditorProps> = (props) => {
     callbackSave();
   }
 
+  // Рекурсивное удаление элемента и его дочерних элементов
   function recursiveChildDeletion(nodeId: number, template: INodes) {
     let childIds: number[] = template[nodeId].childIds;
     if (childIds.length) {
