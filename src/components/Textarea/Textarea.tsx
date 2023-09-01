@@ -1,4 +1,4 @@
-import { ChangeEvent, SyntheticEvent, FC, useRef, useState, useLayoutEffect, } from 'react';
+import { ChangeEvent, SyntheticEvent, FC, useRef, useLayoutEffect } from 'react';
 
 import styles from './Textarea.module.scss';
 import { MIN_TEXTAREA_HEIGHT } from '../../utils/constants';
@@ -9,7 +9,6 @@ interface ITextareaProps {
   onChange: (event: ChangeEvent<HTMLTextAreaElement>, id: number) => void;
   onSelect: (event: SyntheticEvent<HTMLTextAreaElement, Event>, id: number) => void;
 }
-
 
 const Textarea: FC<ITextareaProps> = (props) => {
   const { id, initialText, onChange, onSelect } = props;

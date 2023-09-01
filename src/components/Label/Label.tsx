@@ -9,7 +9,7 @@ interface ILabelProps {
 
 const cx = classNames.bind(styles);
 
-const Label:FC<ILabelProps> = (props) => {
+const Label: FC<ILabelProps> = (props) => {
   const { value } = props;
 
   const labelStyles = cx({
@@ -19,9 +19,7 @@ const Label:FC<ILabelProps> = (props) => {
     turquoise: value === 'else',
   });
 
-  return (
-    <label className={labelStyles}>{value}</label>
-  )
-}
+  return <label className={labelStyles}>{value}</label>;
+};
 
-export default Label
+export default Label;

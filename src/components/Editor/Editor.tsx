@@ -34,7 +34,10 @@ const Editor: FC<IEditorProps> = (props) => {
     onOpenPopupWithMessagePreview,
   } = props;
 
-  const [lastCaretData, setLastCaretData] = useState<ILastCaretData>({ textareaId: 0, position: 0 });
+  const [lastCaretData, setLastCaretData] = useState<ILastCaretData>({
+    textareaId: 0,
+    position: 0,
+  });
   const [templateIsEmpty, setTemplateIsEmpty] = useState(true);
   const [activeTextArea, setActiveTextArea] = useState<HTMLTextAreaElement | null>(null);
 
@@ -96,7 +99,7 @@ const Editor: FC<IEditorProps> = (props) => {
       const newCaretData = {
         ...lastCaretData,
         position: lastCaretData.position + varName.length + 2,
-      }
+      };
       setLastCaretData(newCaretData);
       setTheCaretPosition(newCaretData);
     }
@@ -144,7 +147,7 @@ const Editor: FC<IEditorProps> = (props) => {
       name: 'end',
       childIds: [...nodeChildren],
     };
-    setTheCaretPosition({...lastCaretData});
+    setTheCaretPosition({ ...lastCaretData });
     onSetTemplate(newTemplate);
   }
 

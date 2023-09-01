@@ -41,7 +41,6 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
     updateMessage(newVarData);
   }
   console.log(template);
-  
 
   // Функция для копирования текста в буфер обмена
   async function copyTextToClipboard(text: string) {
@@ -65,7 +64,7 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   return (
     <section className={styles.root}>
@@ -84,10 +83,17 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
       </ul>
       <ul className={styles.buttonsList}>
         <li className={styles.buttonsListItem}>
-          <button onClick={handleCopyClick} className={styles.button} type="button">{isCopied ? 'Copied!' : 'Copy'}</button>
+          <button onClick={handleCopyClick} className={styles.button} type="button">
+            {isCopied ? 'Copied!' : 'Copy'}
+          </button>
         </li>
         <li className={styles.buttonsListItem}>
-        <button onClick={onClose} className={`${styles.button} ${styles.highlighted}`} type="button">Close</button>
+          <button
+            onClick={onClose}
+            className={`${styles.button} ${styles.highlighted}`}
+            type="button">
+            Close
+          </button>
         </li>
       </ul>
     </section>

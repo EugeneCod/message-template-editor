@@ -12,6 +12,7 @@ interface INodeTreeProps {
   onDeleteBranch: (nodeId: number) => void;
 }
 
+// Компонент рекурсивного отображения узлов шаблона
 const NodeTree: FC<INodeTreeProps> = (props) => {
   const { nodeId, template, onTextAreaChange, onTextAreaSelect, onDeleteBranch } = props;
   const node = template[nodeId];
@@ -87,29 +88,6 @@ const NodeTree: FC<INodeTreeProps> = (props) => {
       )}
     </>
   );
-
-  // <div className={styles.treeContainer}>
-  //   <div className={styles.closeBtnContainer}>
-  //     <button type="button" className={styles.closeBtn}>
-  //       &#215;
-  //     </button>
-  //   </div>
-  //   <fieldset className={styles.conditionalFieldset}>
-  //     <div className={styles.conditionalBlock}>
-  //       <label className={conditionalLabelIf}>IF</label>
-  //       <Textarea />
-  //     </div>
-  //     <div className={styles.conditionalBlock}>
-  //       <label className={conditionalLabelThen}>THEN</label>
-  //       <Textarea />
-  //     </div>
-  //     <div className={styles.conditionalBlock}>
-  //       <label className={conditionalLabelElse}>ELSE</label>
-  //       <Textarea />
-  //     </div>
-  //   </fieldset>
-  // </div>
-  // );
 };
 
 export default NodeTree;
