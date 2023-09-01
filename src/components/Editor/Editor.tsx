@@ -18,6 +18,11 @@ interface IEditorProps {
   onOpenPopupWithMessagePreview: () => void;
 }
 
+interface ILastCaretData {
+  textareaId: number;
+  position: number;
+}
+
 const Editor: FC<IEditorProps> = (props) => {
   const {
     arrVarNames,
@@ -29,7 +34,7 @@ const Editor: FC<IEditorProps> = (props) => {
     onOpenPopupWithMessagePreview,
   } = props;
 
-  const [lastCaretData, setLastCaretData] = useState({ textareaId: 0, position: 0 });
+  const [lastCaretData, setLastCaretData] = useState<ILastCaretData>({ textareaId: 0, position: 0 });
   const [templateIsEmpty, setTemplateIsEmpty] = useState(true);
   const [activeTextArea, setActiveTextArea] = useState<HTMLTextAreaElement | null>(null);
 
@@ -67,9 +72,9 @@ const Editor: FC<IEditorProps> = (props) => {
     onSetTemplate(newTemplate);
   }
 
-  const setTheCaretPosition = () => {
+  const setTheCaretPosition = (caretData: ILastCaretData) => {
     if (activeTextArea) {
-      const position = lastCaretData.position;
+      const position = caretData.position;
       activeTextArea.focus();
       setTimeout(() => {
         activeTextArea.setSelectionRange(position, position);
@@ -85,11 +90,12 @@ const Editor: FC<IEditorProps> = (props) => {
       const endString = lastActiveNode.text.slice(lastCaretData.position);
       const resultString = `${startString}{${varName}}${endString}`;
       updateNodeText(resultString, nodeId);
-      setLastCaretData({
+      const newCaretData = {
         ...lastCaretData,
         position: lastCaretData.position + varName.length + 2,
-      });
-      setTheCaretPosition();
+      }
+      setLastCaretData(newCaretData);
+      setTheCaretPosition(newCaretData);
     }
   }
 
