@@ -1,6 +1,15 @@
 import getMessage from './getMessage';
 import { INodes } from '../types';
 
+const templateWithoutConditions: INodes = {
+  0: {
+    id: 0,
+    text: 'Hello {firstname} {lastname}.',
+    name: 'root',
+    childIds: [],
+  },
+};
+
 const templateWithTwoConditions: INodes = {
   0: {
     id: 0,
@@ -110,10 +119,12 @@ describe('getMessage', () => {
     const values = {
       firstname: 'Bill',
       company: 'Bill & Melinda Gates Foundation',
-      position: 'Co-chair'
+      position: 'Co-chair',
     };
     const message = getMessage(template, values);
-    expect(message).toBe('Hello Bill. I know you work at Bill & Melinda Gates Foundation as Co-chair. ;)');
+    expect(message).toBe(
+      'Hello Bill. I know you work at Bill & Melinda Gates Foundation as Co-chair. ;)',
+    );
   });
 
   it('Возвращает правильную строку, когда переменные не заполнены и имеются две условные конструкции', () => {
@@ -121,7 +132,7 @@ describe('getMessage', () => {
     const values = {
       firstname: '',
       company: '',
-      position: ''
+      position: '',
     };
     const message = getMessage(template, values);
     expect(message).toBe('Hello . Where do you work at the moment? Jake. Software Developer. ');
@@ -132,20 +143,38 @@ describe('getMessage', () => {
     const values = {
       firstname: 'Bill',
       company: 'Bill & Melinda Gates Foundation',
-      position: 'Co-chair'
+      position: 'Co-chair',
     };
     const message = getMessage(template, values);
-    expect(message).toBe('Hello Bill. I know you work at Bill & Melinda Gates Foundation as Co-chair. ;) Jake. Software Developer. ');
+    expect(message).toBe(
+      'Hello Bill. I know you work at Bill & Melinda Gates Foundation as Co-chair. ;) Jake. Software Developer. ',
+    );
   });
 
-  it('Возвращает правильную строку, когда в блоке \'if\' указан условный оператор', () => {
+  it("Возвращает правильную строку, когда в блоке 'if' указан условный оператор", () => {
     const template: INodes = templateWithLogicOperators;
     const values = {
       firstname: 'Bill',
       company: '',
-      position: ''
+      position: '',
     };
     const message = getMessage(template, values);
     expect(message).toBe('Hello Bill. ;) ');
+  });
+  it('Не преобразует значение переменной, когда оно может интерпретироваться, как другая переменная', () => {
+    const template: INodes = templateWithoutConditions;
+    let values = {
+      firstname: 'Bill',
+      lastname: '{firstname}',
+    };
+    let message = getMessage(template, values);
+    expect(message).toBe('Hello Bill {firstname}.');
+
+    values = {
+      firstname: '{lastname}',
+      lastname: 'Gates',
+    };
+    message = getMessage(template, values);
+    expect(message).toBe('Hello {lastname} Gates.');
   });
 });

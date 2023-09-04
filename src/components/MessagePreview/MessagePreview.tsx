@@ -40,7 +40,6 @@ const MessagePreview: FC<MessagePreviewProps> = (props) => {
     setVarData(newVarData);
     updateMessage(newVarData);
   }
-  console.log(template);
 
   // Функция для копирования текста в буфер обмена
   async function copyTextToClipboard(text: string) {

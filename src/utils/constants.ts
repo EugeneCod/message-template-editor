@@ -4,7 +4,7 @@ export const ARR_VAR_NAMES: string[] = ['firstname', 'lastname', 'company', 'pos
 export const INITAIL_TEMPLATE: INodes = {
   0: {
     id: 0,
-    text: 'Изначальный текст',
+    text: '',
     name: 'root',
     childIds: [],
   },

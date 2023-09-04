@@ -14,7 +14,7 @@ function generateMessageFromTree(node: INode, template: INodes, varData: IVarDat
   let message = '';
   if (node.text.length) {
     message = convertVarToValue(node.text, varData);
-  };
+  }
   if (node.childIds.length === 0) return message;
 
   const childIf = template[node.childIds[0]];
@@ -33,12 +33,29 @@ function generateMessageFromTree(node: INode, template: INodes, varData: IVarDat
 }
 
 function convertVarToValue(text: string, varData: IVarData) {
-  let result: string = text;
+  let result = '';
+  let restOfString = text;
   const arrVarNames = Object.keys(varData);
-  arrVarNames.forEach((variable) => {
-    const newString = result.replaceAll(`{${variable}}`, varData[variable]);
-    result = newString;
-  });
+  // Регулярка поиска букв от 1 до бесконечности в любом регистре в фигурных скобках
+  let target = /\{([a-z]{1,})\}/i;
+
+  let match: RegExpMatchArray | null | undefined;
+  while (true) {
+    match = restOfString.match(target);
+    // Если совпадений нет - прибавить остаток строки к результату и прекратить цикл
+    if (match === null || match.index === undefined) {
+      result += restOfString;
+      break;
+    }
+    arrVarNames.includes(match[1])
+      ? // Если массив имен переменных содержит совпадение - прибавить к результату
+        // часть остатка строки до совпадения и значение найденной переменной
+        (result = result + restOfString.slice(0, match.index) + varData[match[1]])
+      : // В ином случае прибавить к результату часть остатка строки вместе
+        // с совпадением в неизменном виде
+        (result += restOfString.slice(0, match.index + match[0].length));
+    restOfString = restOfString.slice(match.index + match[0].length);
+  }
   return result;
 }
 
