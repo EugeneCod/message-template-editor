@@ -33,28 +33,34 @@ function generateMessageFromTree(node: INode, template: INodes, varData: IVarDat
 }
 
 function convertVarToValue(text: string, varData: IVarData) {
-  let result = '';
-  let restOfString = text;
+  let result = text;
   const arrVarNames = Object.keys(varData);
-  // Регулярка поиска букв от 1 до бесконечности в любом регистре в фигурных скобках
-  let target = /\{([a-z]{1,})\}/i;
-
-  let match: RegExpMatchArray | null | undefined;
-  while (true) {
-    match = restOfString.match(target);
-    // Если совпадений нет - прибавить остаток строки к результату и прекратить цикл
-    if (match === null || match.index === undefined) {
-      result += restOfString;
-      break;
+  // Пройти циклом по всем символам
+  for (let i = 0; i < result.length; i++) {
+    // Если встретилась открывающая скобка -
+    if (result[i] === '{') {
+      // пройти циклом по всем символам после неё
+      for (let j = i + 1; j < result.length; j++) {
+        // Если встретилась закрывающая скобка -
+        if (result[j] === '}') {
+          // выделить подстроку между фигурными скобками
+          const target = result.slice(i + 1, j);
+          // Если массив имён переменных содержит такое имя -
+          if (arrVarNames.includes(target)) {
+            // найти значение переменной с таким именем,
+            const varValue = varData[target];
+            // преобразовать в результате имя переменной на её значение,
+            // исключив фигурные скобки
+            result = `${result.slice(0, i)}${varValue}${result.slice(j + 1)}`;
+            // переопределить индекс основного цикла, чтобы в текущей
+            // итерации он указывал на последний символ значения переменной
+            // или на предыдущий, если значение переменной пустое
+            i += varValue.length - 1;
+            break;
+          }
+        }
+      }
     }
-    arrVarNames.includes(match[1])
-      ? // Если массив имен переменных содержит совпадение - прибавить к результату
-        // часть остатка строки до совпадения и значение найденной переменной
-        (result = result + restOfString.slice(0, match.index) + varData[match[1]])
-      : // В ином случае прибавить к результату часть остатка строки вместе
-        // с совпадением в неизменном виде
-        (result += restOfString.slice(0, match.index + match[0].length));
-    restOfString = restOfString.slice(match.index + match[0].length);
   }
   return result;
 }

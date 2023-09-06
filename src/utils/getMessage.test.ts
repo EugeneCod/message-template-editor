@@ -177,4 +177,23 @@ describe('getMessage', () => {
     message = getMessage(template, values);
     expect(message).toBe('Hello {lastname} Gates.');
   });
+  it("Возвращает правильную строку, когда имя переменной состоит из различных символов", () => {
+    const template: INodes = {
+      0: {
+        id: 0,
+        text: 'Hello {firstname} {123} {/.?#%@)([]{}} {} {a1/} {a1/ 123}.',
+        name: 'root',
+        childIds: [],
+      },
+    };
+    const values = {
+      firstname: 'Bill',
+      '123': 'Word',
+      '/.?#%@)([]{}': 'Word2',
+      'a1/': '',
+      'a1/ 123': 'Word3',
+    };
+    const message = getMessage(template, values);
+    expect(message).toBe('Hello Bill Word Word2 {}  Word3.');
+  });
 });
